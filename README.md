@@ -9,7 +9,7 @@ While chances are low, modifying your game might get your account suspended, __*
 Inject the dll found in [releases](https://github.com/QuickNET-Tech/GTAO_Booster_PoC/releases) with a DLL injector of your choice and then just head online  
 NOTE : You can inject whenever you want as long as GTA5.exe is running and before you've started to head online
 
-## How to
+## How to build
 
 * `git clone --recurse-submodules https://github.com/QuickNET-Tech/GTAO_Booster_PoC`
 * build the project with MSVC

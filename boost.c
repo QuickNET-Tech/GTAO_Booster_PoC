@@ -112,7 +112,7 @@ DWORD WINAPI initialize(LPVOID lpParam)
 	return 0;
 }
 
-BOOL WINAPI DllMain(HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReversed)
+BOOL WINAPI dllMain(HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReversed)
 {
 	switch (fdwReason)
 	{

@@ -1,6 +1,6 @@
 #pragma once
 
-static BOOL consoleEnabled = TRUE;
+extern BOOL consoleEnabled;
 
 void logMsg(char const* fmt, ...);
 

@@ -1,5 +1,7 @@
 #include "../headers.h"
 
+BOOL consoleEnabled = TRUE;
+
 static char logBuf[0xFFF];
 
 void logMsg(char const* fmt, ...) {

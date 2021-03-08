@@ -6,6 +6,8 @@ static HANDLE uninjectThread = NULL;
 
 static HMODULE gtaoBoosterHmod;
 
+static char const* configFile = "Universal GTAO_Booster.ini";
+
 // proper dll self unloading - not sure where I got this from
 DWORD WINAPI unloadThread(LPVOID lpThreadParameter) {
 	CloseHandle(uninjectThread);
@@ -14,7 +16,7 @@ DWORD WINAPI unloadThread(LPVOID lpThreadParameter) {
 
 void unload(void) {
 	MH_DisableHook((LPVOID)netCatalogueInsertUniquePtr);
-	logMsg("Unhooked netcat_insert_dedupe");
+	logMsg("Unhooked netCatalogueInsertUnique");
 
 	logMsg("Unloading...");
 
@@ -37,8 +39,56 @@ void waitForGameWindow(void) {
 	}
 }
 
+BOOL doesFileExist(char const* file) {
+	uint32_t attr = GetFileAttributesA(file);
+	return attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+void createConfig(void) {
+	FILE* file;
+	fopen_s(&file, configFile, "w");
+	if(file) {
+		fputs("[settings]\nenableConsole=1", file);
+		fclose(file);
+		
+		consoleEnabled = TRUE;
+	}
+	else {
+		logMsgColor(consoleBrightRedOnBlack, "Unable to create %s", configFile);
+	}
+}
+
+void readConfig(void) {
+	ini_t* config = ini_load(configFile);
+	
+	if(config) {
+		if(!ini_sget(config, "settings", "enableConsole", "%d", &consoleEnabled)) {
+			MessageBoxA(NULL, "An error occurred while trying to read from Universal GTAO_Booster.ini", messageboxTitle, 0);
+		}
+	}
+	else {
+		MessageBoxA(NULL, "Failed to load ini file", messageboxTitle, 0);
+	}
+
+	ini_free(config);
+}
+
+void handleConfig(void) {
+	if(doesFileExist(configFile)) {
+		readConfig();
+	}
+	else {
+		createConfig();
+	}
+}
+
 DWORD WINAPI initialize(LPVOID lpParam) {
+	waitForGameWindow();
+	
+	handleConfig();
+
 	createConsoleAndRedirectIo();
+	
 	logMsgColor(consoleBrightWhiteOnBlack,
 		"____________________________________________________________\n"
 		"                                                            \n"

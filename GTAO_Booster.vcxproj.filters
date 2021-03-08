@@ -28,6 +28,9 @@
     <Filter Include="Source Files\log">
       <UniqueIdentifier>{05ba2e4a-093d-4252-89c9-3b7841506b2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ini">
+      <UniqueIdentifier>{4f9183a9-421f-4144-a6cf-a32991e0e2ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="boost.c">
@@ -57,6 +60,9 @@
     <ClCompile Include="log\log.c">
       <Filter>Source Files\log</Filter>
     </ClCompile>
+    <ClCompile Include="ini\ini.c">
+      <Filter>Source Files\ini</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers.h">
@@ -73,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="log\log.h">
       <Filter>Source Files\log</Filter>
+    </ClInclude>
+    <ClInclude Include="ini\ini.h">
+      <Filter>Source Files\ini</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

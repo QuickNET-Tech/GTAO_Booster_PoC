@@ -13,5 +13,7 @@ extern IMAGE_DOS_HEADER* gtaDosHeader;
 extern IMAGE_NT_HEADERS* gtaNtHeader;
 extern size_t gtaLen;
 
+extern char const* messageboxTitle;
+
 // returns FALSE on a sig fail, TRUE otherwise 
 BOOL findSigs(void);

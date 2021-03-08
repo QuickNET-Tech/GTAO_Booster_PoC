@@ -1,6 +1,6 @@
 #pragma once
 
-extern VirtualFunction vfunc;
+extern VirtualFunction unkItemTransactionFunc;
 extern NetCatalogueInsert netCatalogueInsert;
 extern Strlen originalStrlen;
 

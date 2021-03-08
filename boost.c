@@ -30,13 +30,13 @@ uint32_t* game_state = NULL;
 uint8_t aob[0xFF];
 char mask[0xFF];
 
-HMODULE gtao_booster_hmod;
-HMODULE gta_hmod;
-IMAGE_DOS_HEADER* gta_dos_header;
-IMAGE_NT_HEADERS* gta_nt_header;
-void* gta_start;
-size_t gta_len;
-uint8_t* gta_end;
+static HMODULE gtao_booster_hmod;
+static HMODULE gta_hmod;
+static IMAGE_DOS_HEADER* gta_dos_header;
+static IMAGE_NT_HEADERS* gta_nt_header;
+static void* gta_start;
+static size_t gta_len;
+static uint8_t* gta_end;
 
 BOOL should_exit_due_to_failure = FALSE;
 

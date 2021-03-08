@@ -244,13 +244,13 @@ BOOL findSigs(void)
 {
 	initGlobalVars();
 	
-	netCatalogueInsertUniquePtr = scan("netcat_insert_dedupe", "4C 89 44 24 18 57 48 83 EC ? 48 8B FA", -0x5);
+	netCatalogueInsertUniquePtr = scan("netCatalogueInsertUnique", "4C 89 44 24 18 57 48 83 EC ? 48 8B FA", -0x5);
 
 	strlenPtr = rip(scan("strlen", "48 3B C1 4C 8B C6", -0x11));
 
 	netCatalogueInsert = (NetCatalogueInsert)rip(scan("netCatalogueInsert", "3B D1 B0 01 0F 4E D1", -0x11));  // NOLINT(clang-diagnostic-cast-align)
 
-	isSessionStartedPtr = rip(scan("isSessionStartedPtr", "40 38 35 ? ? ? ? 74 ? 48 8B CF E8", 0x3));
+	isSessionStartedPtr = rip(scan("isSessionStarted", "40 38 35 ? ? ? ? 74 ? 48 8B CF E8", 0x3));
 
 #ifdef ENABLE_DEBUG_PRINTS
 	printf("GTA5.exe == 0x%llX\n", (uint64_t)gtaStart);

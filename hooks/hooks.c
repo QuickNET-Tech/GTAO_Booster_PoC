@@ -46,7 +46,7 @@ size_t strlenHook(char* str)
 
 // normally this checks for duplicates before inserting
 // but to speed things up we just skip that and insert directly
-char __fastcall netCatalogueInsertUniquehook(uint64_t catalog, uint64_t* key, uint64_t* item)
+char __fastcall netCatalogueInsertUniqueHook(uint64_t catalog, uint64_t* key, uint64_t* item)
 {
 	// didn't bother reversing the structure
 	uint64_t hashArray = catalog + 88;
@@ -66,7 +66,7 @@ char __fastcall netCatalogueInsertUniquehook(uint64_t catalog, uint64_t* key, ui
 void createHooks(void)
 {
 	MH_CreateHook((LPVOID)strlenPtr, (LPVOID)&strlenHook, (LPVOID*)&originalStrlen);
-	MH_CreateHook((LPVOID)netCatalogueInsertUniquePtr, (LPVOID)&netCatalogueInsertUniquehook, NULL);	
+	MH_CreateHook((LPVOID)netCatalogueInsertUniquePtr, (LPVOID)&netCatalogueInsertUniqueHook, NULL);	
 }
 
 void enableHooks(void)

@@ -164,11 +164,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="boost.c" />
+    <ClCompile Include="hooks\hooks.c" />
     <ClCompile Include="minhook\src\buffer.c" />
     <ClCompile Include="minhook\src\hde\hde32.c" />
     <ClCompile Include="minhook\src\hde\hde64.c" />
     <ClCompile Include="minhook\src\hook.c" />
     <ClCompile Include="minhook\src\trampoline.c" />
+    <ClCompile Include="sigs\sigs.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="headers.h" />
+    <ClInclude Include="hooks\hooks.h" />
+    <ClInclude Include="sigs\sigs.h" />
+    <ClInclude Include="types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

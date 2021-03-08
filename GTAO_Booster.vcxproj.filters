@@ -19,6 +19,12 @@
     <Filter Include="Source Files\minhook\hde">
       <UniqueIdentifier>{08371a9a-7de2-4ec1-9794-e59030fab34c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\sigs">
+      <UniqueIdentifier>{3d05d29e-9d4b-40ee-a40c-7dd522e375ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hooks">
+      <UniqueIdentifier>{65fc070a-4db1-4210-9636-66e264f0b5a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="boost.c">
@@ -39,5 +45,25 @@
     <ClCompile Include="minhook\src\hde\hde64.c">
       <Filter>Source Files\minhook\hde</Filter>
     </ClCompile>
+    <ClCompile Include="sigs\sigs.c">
+      <Filter>Source Files\sigs</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\hooks.c">
+      <Filter>Source Files\hooks</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="headers.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sigs\sigs.h">
+      <Filter>Source Files\sigs</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks\hooks.h">
+      <Filter>Source Files\hooks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -154,7 +154,7 @@
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <EntryPointSymbol>dllMain</EntryPointSymbol>
-      <AdditionalDependencies>kernel32.lib;ucrt.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;ucrt.lib;vcruntime.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EnableUAC>false</EnableUAC>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
@@ -165,6 +165,7 @@
   <ItemGroup>
     <ClCompile Include="boost.c" />
     <ClCompile Include="hooks\hooks.c" />
+    <ClCompile Include="log\log.c" />
     <ClCompile Include="minhook\src\buffer.c" />
     <ClCompile Include="minhook\src\hde\hde32.c" />
     <ClCompile Include="minhook\src\hde\hde64.c" />
@@ -175,6 +176,7 @@
   <ItemGroup>
     <ClInclude Include="headers.h" />
     <ClInclude Include="hooks\hooks.h" />
+    <ClInclude Include="log\log.h" />
     <ClInclude Include="sigs\sigs.h" />
     <ClInclude Include="types.h" />
   </ItemGroup>

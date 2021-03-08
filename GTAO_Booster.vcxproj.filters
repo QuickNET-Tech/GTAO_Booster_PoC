@@ -25,6 +25,9 @@
     <Filter Include="Source Files\hooks">
       <UniqueIdentifier>{65fc070a-4db1-4210-9636-66e264f0b5a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\log">
+      <UniqueIdentifier>{05ba2e4a-093d-4252-89c9-3b7841506b2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="boost.c">
@@ -51,6 +54,9 @@
     <ClCompile Include="hooks\hooks.c">
       <Filter>Source Files\hooks</Filter>
     </ClCompile>
+    <ClCompile Include="log\log.c">
+      <Filter>Source Files\log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers.h">
@@ -64,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="hooks\hooks.h">
       <Filter>Source Files\hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="log\log.h">
+      <Filter>Source Files\log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

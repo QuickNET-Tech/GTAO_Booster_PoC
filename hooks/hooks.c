@@ -16,7 +16,7 @@ size_t strlenHook(char* str) {
 		// if we're near the end, unload self
 		// we don't want to mess something else up
 		if(len < cap / 2) {
-			printf("Unhooked strlen\n");
+			logMsg("Unhooked strlen");
 			MH_DisableHook((LPVOID)strlenPtr);
 		}
 
@@ -70,11 +70,11 @@ void enableHooks(void) {
 
 void initHooks(void) {
 	MH_Initialize();
-	printf("MinHook initialized\n");
+	logMsg("MinHook initialized");
 
 	createHooks();
-	printf("Hooks created\n");
+	logMsg("Hooks created");
 
 	enableHooks();
-	printf("Hooks enabled\n");
+	logMsg("Hooks enabled");
 }

@@ -6,32 +6,6 @@ static HANDLE uninjectThread = NULL;
 
 static HMODULE gtaoBoosterHmod;
 
-void createConsoleAndRedirectIo(void) {
-	AllocConsole();
-
-	EnableMenuItem(GetSystemMenu(GetConsoleWindow(), FALSE), SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-
-	SetConsoleTitle(L"Grand Theft Auto V : Universal GTAO_Booster v1.0.1 by QuickNET ");
-
-	FILE* file = NULL;
-
-	freopen_s(&file, "CONIN$", "r", stdin);
-	freopen_s(&file, "CONOUT$", "w", stdout);
-	freopen_s(&file, "CONOUT$", "w", stderr);
-}
-
-void removeConsoleAndIoRedirect(void) {
-	HWND consoleWindow = GetConsoleWindow();
-	FILE* file = NULL;
-
-	freopen_s(&file, "NUL:", "r", stdin);
-	freopen_s(&file, "NUL:", "w", stdout);
-	freopen_s(&file, "NUL:", "w", stderr);
-
-	FreeConsole();
-	DestroyWindow(consoleWindow); // shouldn't be necessary at all, but can't hurt to be a little forceful
-}
-
 // proper dll self unloading - not sure where I got this from
 DWORD WINAPI unloadThread(LPVOID lpThreadParameter) {
 	CloseHandle(uninjectThread);
@@ -40,21 +14,15 @@ DWORD WINAPI unloadThread(LPVOID lpThreadParameter) {
 
 void unload(void) {
 	MH_DisableHook((LPVOID)netCatalogueInsertUniquePtr);
-	printf("Unhooked netcat_insert_dedupe\n");
+	logMsg("Unhooked netcat_insert_dedupe");
 
-	printf("Unloading...\n");
+	logMsg("Unloading...");
 
 	Sleep(1000);
 
 	removeConsoleAndIoRedirect();
 
 	uninjectThread = CreateThread(NULL, 0, &unloadThread, NULL, 0, NULL);
-}
-
-void printUserInstruction(void) {
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0A);
-	printf("Load online when you're ready\nUniversal GTAO_Booster will unload and this window will disappear automatically, this is normal!\n");
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
 }
 
 void waitToUnload(void) {
@@ -71,30 +39,29 @@ void waitForGameWindow(void) {
 
 DWORD WINAPI initialize(LPVOID lpParam) {
 	createConsoleAndRedirectIo();
-	printf(
+	logMsgColor(consoleBrightWhiteOnBlack,
 		"____________________________________________________________\n"
 		"                                                            \n"
 		"             Welcome to Universal GTAO_Booster!             \n"
 		"  Massive thanks to tostercx for the original GTAO_Booster  \n"
 		"        Universal GTAO_Booster created by QuickNET          \n"
 		"____________________________________________________________\n"
-		"                                                            \n"
-		"Allocated console\n"
 	);
+	logMsg("Allocated console");
 	
 	uint64_t startTime = GetTickCount64();
 	
 	if(findSigs()) {
-		printf("Finished finding pointers in %llums\n", GetTickCount64() - startTime);
+		logMsg("Finished finding pointers in %llums", GetTickCount64() - startTime);
 
 		initHooks();
 
-		printUserInstruction();
+		logMsgColor(consoleBrightGreenOnBlack, "Load online when you're ready\nUniversal GTAO_Booster will unload and this window will disappear automatically, this is normal!");
 
 		waitToUnload();
 	}
 	else {
-		printf("One or more errors occurred while finding pointers\n");
+		logMsg("One or more errors occurred while finding pointers");
 	}
 	
 	unload();

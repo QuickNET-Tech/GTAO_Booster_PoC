@@ -145,6 +145,8 @@ void fillAobAndMaskBuffers(char const* sig) {
 }
 
 void notifyOnScanFailure(char const* name) {
+	logMsgColor(consoleBrightRedOnBlack, "Pattern '%s' failed.", name);
+	
 	char buf[0xFF];
 	int result = sprintf_s(buf, sizeof(buf), "Pattern '%s' failed.", name);
 
@@ -176,7 +178,7 @@ uint8_t* scan(char const* name, char const* sig, int64_t offset) {
 	uint8_t* scanEnd = gtaEnd - sigByteCount(sig);
 	for(uint8_t* scanCursor = gtaStart; scanCursor < scanEnd; ++scanCursor) {
 		if(doesSigMatch(scanCursor)) {
-			printf("Found %s\n", name);
+			logMsgColor(consoleGrayOnBlack, "Found %s", name);
 			return scanCursor + offset;
 		}
 	}
@@ -202,7 +204,7 @@ void initGlobalVars(void) {
 	gtaLen = gtaNtHeader->OptionalHeader.SizeOfImage;
 	gtaEnd = (uint8_t*)gtaStart + gtaLen;
 
-	printf("Variables initialized\n");
+	logMsg("Variables initialized");
 }
 
 BOOL findSigs(void) {

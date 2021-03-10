@@ -10,7 +10,7 @@ While chances are low, modifying your game might get your account suspended, __*
 
 ## How to use
 
-Inject the dll found in [releases](https://github.com/QuickNET-Tech/GTAO_Booster_PoC/releases) with a DLL injector of your choice ([Xenos](https://github.com/DarthTon/Xenos) and [Extreme Injector](https://github.com/master131/ExtremeInjector) are popular choices) and then just head online  
+Inject the dll found in [releases](https://github.com/QuickNET-Tech/GTAO_Booster_PoC/releases) with a DLL injector of your choice ([Xenos](https://github.com/DarthTon/Xenos) is my go to, [Extreme Injector](https://github.com/master131/ExtremeInjector) is another popular choices) and then just head online  
 NOTE : You can inject whenever you want as long as GTA5.exe is running and before you've started to head online
 
 ## Anti-virus

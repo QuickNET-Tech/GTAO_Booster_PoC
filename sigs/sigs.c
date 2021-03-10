@@ -1,7 +1,7 @@
 #include "../headers.h"
 
 VirtualFunction unkItemTransactionFunc = NULL;
-NetCatalogueInsert netCatalogueInsert = NULL;
+NetCatalogueInsert netCatalogueInsertPtr = NULL;
 Strlen originalStrlen = NULL;
 
 HMODULE gtaHmod = NULL;
@@ -19,6 +19,15 @@ static void* gtaStart;
 static uint8_t* gtaEnd;
 
 char const* messageboxTitle = "Universal GTAO_Booster";
+
+static char const* legalsName = "legals";
+static char const* rsLogosName = "rsLogos";
+static char const* netCatalogueInsertUniqueName = "netCatalogueInsertUnique";
+static char const* strlenName = "strlen";
+static char const* netCatalogueInsertName = "netCatalogueInsert";
+static char const* isSessionStartedName = "isSessionStarted";
+
+void *legalsPtr, *rsLogosPtr;
 
 uint8_t aob[0xFF];
 char mask[0xFF];
@@ -207,22 +216,68 @@ void initGlobalVars(void) {
 	logMsg("Variables initialized");
 }
 
-BOOL findSigs(void) {
-	initGlobalVars();
+void vpMemcpy(void* destination, void* source, size_t size) {
+	DWORD protect;
+
+	VirtualProtect(destination, size, PAGE_EXECUTE_READWRITE, &protect);
+
+	memcpy(destination, source, size);
+
+	VirtualProtect(destination, size, protect, &protect);
+}
+
+void nop(void* addr, size_t bytesToNop) {
+	memset(addr, 0x90, bytesToNop);
+}
+
+void applyLegalAndLogoPatches(void) {
+	if(!shouldApplyLegalAndLogoPatches) {
+		logMsg("Skipped patching %s", legalsName);
+		logMsg("Skipped patching %s", rsLogosName);
+		return;
+	}
 	
-	netCatalogueInsertUniquePtr = scan("netCatalogueInsertUnique", "4C 89 44 24 18 57 48 83 EC ? 48 8B FA", -0x5);
-
-	strlenPtr = rip(scan("strlen", "48 3B C1 4C 8B C6", -0x11));
-
-	netCatalogueInsert = (NetCatalogueInsert)rip(scan("netCatalogueInsert", "3B D1 B0 01 0F 4E D1", -0x11));  // NOLINT(clang-diagnostic-cast-align)
-
-	isSessionStartedPtr = rip(scan("isSessionStarted", "40 38 35 ? ? ? ? 74 ? 48 8B CF E8", 0x3));
+	nop(legalsPtr, 2);
+	logMsg("Patched %s", legalsName);
+	
+	uint8_t ret = 0xC3;
+	vpMemcpy(rsLogosPtr, &ret, sizeof(ret));
+	logMsg("Patched %s", rsLogosName);
+}
 
 #ifdef ENABLE_DEBUG_PRINTS
-	printf("GTA5.exe == 0x%llX\n", (uint64_t)gtaStart);
-	printf("netcat_insert_dedupe == 0x%llX | GTA5.exe + 0x%llX\n", (uint64_t)netCatalogueInsertUniquePtr, (uint64_t)netCatalogueInsertUniquePtr - (uint64_t)gtaStart);
-	printf("strlen == 0x%llX | GTA5.exe + 0x%llX\n", (uint64_t)strlenPtr, (uint64_t)strlenPtr - (uint64_t)gtaStart);
-	printf("netCatalogueInsert == 0x%llX | GTA5.exe + 0x%llX\n", (uint64_t)netCatalogueInsert, (uint64_t)netCatalogueInsert - (uint64_t)gtaStart);
+static const char* offsetFormatStr = "%s == 0x%llX | GTA5.exe + 0x%llX";
+void logOffset(char const* name, void* address) {
+	logMsg(offsetFormatStr, name, (uint64_t)address, (uint64_t)address - (uint64_t)gtaStart);
+}
+
+void logOffsets(void) {
+	logMsg("GTA5.exe == 0x%llX\n", (uint64_t)gtaStart);
+	
+	logOffset(netCatalogueInsertUniqueName, netCatalogueInsertUniquePtr);
+	logOffset(strlenName, strlenPtr);
+	logOffset(netCatalogueInsertName, netCatalogueInsertPtr);  // NOLINT(clang-diagnostic-pedantic)
+	logOffset(isSessionStartedName, isSessionStartedPtr);
+}
+#endif
+
+BOOL findSigs(void) {
+	initGlobalVars();
+
+	netCatalogueInsertUniquePtr = scan(netCatalogueInsertUniqueName, "4C 89 44 24 18 57 48 83 EC ? 48 8B FA", -0x5);
+
+	strlenPtr = rip(scan(strlenName, "48 3B C1 4C 8B C6", -0x11));
+
+	netCatalogueInsertPtr = (NetCatalogueInsert)rip(scan(netCatalogueInsertName, "3B D1 B0 01 0F 4E D1", -0x11));  // NOLINT(clang-diagnostic-cast-align)
+
+	isSessionStartedPtr = rip(scan(isSessionStartedName, "40 38 35 ? ? ? ? 74 ? 48 8B CF E8", 0x3));
+
+	legalsPtr = scan(legalsName, "66 0F 6E 04 81", 0x13);
+
+	rsLogosPtr = rip(scan(rsLogosName, "45 33 C9 C6 44 24 20 01 48 89", -0x12));
+	
+#ifdef ENABLE_DEBUG_PRINTS
+	logOffsets();
 #endif
 
 	return allPatternsFound;

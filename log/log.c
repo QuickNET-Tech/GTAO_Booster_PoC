@@ -45,7 +45,7 @@ void createConsoleAndRedirectIo(void) {
 
 	EnableMenuItem(GetSystemMenu(GetConsoleWindow(), FALSE), SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
-	SetConsoleTitleA("Grand Theft Auto V : Universal GTAO_Booster v1.0.2 by QuickNET");
+	SetConsoleTitleA("Grand Theft Auto V : Universal GTAO_Booster v1.0.3 by QuickNET");
 
 	FILE* file = NULL;
 
@@ -67,5 +67,5 @@ void removeConsoleAndIoRedirect(void) {
 	freopen_s(&file, "NUL:", "w", stderr);
 
 	FreeConsole();
-	DestroyWindow(consoleWindow); // shouldn't be necessary at all, but can't hurt to be a little forceful
+	DestroyWindow(consoleWindow); // shouldn't be necessary at all, but a little force won't hurt
 }

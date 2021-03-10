@@ -1,5 +1,7 @@
 #include "headers.h"
-
+#include <initguid.h>
+#include <KnownFolders.h>
+#include <ShlObj.h>
 //#define ENABLE_DEBUG_PRINTS
 
 static HANDLE uninjectThread = NULL;
@@ -7,6 +9,12 @@ static HANDLE uninjectThread = NULL;
 static HMODULE gtaoBoosterHmod;
 
 static char const* configFile = "Universal GTAO_Booster.ini";
+
+BOOL shouldApplyLegalAndLogoPatches = FALSE;
+
+void getDocumentsPath(wchar_t* path) {
+	SHGetKnownFolderPath(&FOLDERID_Documents, 0, NULL, &path);
+}
 
 // proper dll self unloading - not sure where I got this from
 DWORD WINAPI unloadThread(LPVOID lpThreadParameter) {
@@ -34,8 +42,14 @@ void waitToUnload(void) {
 }
 
 void waitForGameWindow(void) {
+	if(FindWindowA("grcWindow", NULL)) {
+		return;
+	}
+
+	shouldApplyLegalAndLogoPatches = TRUE;
+	
 	while(!FindWindowA("grcWindow", NULL)) {
-		Sleep(1000);
+		Sleep(50);
 	}
 }
 
@@ -46,15 +60,40 @@ BOOL doesFileExist(char const* file) {
 
 void createConfig(void) {
 	FILE* file;
+	
 	fopen_s(&file, configFile, "w");
+
 	if(file) {
-		fputs("[settings]\nenableConsole=1", file);
-		fclose(file);
+		/*
+			27 is just big enough to hold
+			
+			[settings]
+			enableConsole=%d
+
+			where `%d` is a single digit number
+		*/
+		char iniText[27];
 		
-		consoleEnabled = TRUE;
+		int32_t enableConsoleValue = 1;
+
+		int32_t result = MessageBoxA(NULL, "A config file was either not found or was malformed and was unable to be read.\n\nDo you want the console to be enabled?", messageboxTitle, MB_SETFOREGROUND | MB_ICONQUESTION | MB_YESNO);
+		// any response other than clicking "No" will be interpreted as yes.
+		if(result == IDNO) {
+			enableConsoleValue = 0;
+		}
+
+		// format ini text before writing
+		sprintf_s(iniText, sizeof(iniText), "[settings]\nenableConsole=%d", enableConsoleValue);
+
+		// write formatted ini text
+		fputs(iniText, file);
+
+		fclose(file);
+
+		consoleEnabled = enableConsoleValue;
 	}
 	else {
-		logMsgColor(consoleBrightRedOnBlack, "Unable to create %s", configFile);
+		logMsgColor(consoleBrightRedOnBlack, "Unable to create %s, console will remain enabled", configFile);
 	}
 }
 
@@ -63,7 +102,8 @@ void readConfig(void) {
 	
 	if(config) {
 		if(!ini_sget(config, "settings", "enableConsole", "%d", &consoleEnabled)) {
-			MessageBoxA(NULL, "An error occurred while trying to read from Universal GTAO_Booster.ini", messageboxTitle, 0);
+			// there was an error attempting to read the file, recreate the file
+			createConfig();
 		}
 	}
 	else {
@@ -83,10 +123,12 @@ void handleConfig(void) {
 }
 
 DWORD WINAPI initialize(LPVOID lpParam) {
+	// if injected too early patterns will fail so we must wait to prevent failures
 	waitForGameWindow();
 	
 	handleConfig();
 
+	// create console, if not enabled, does nothing
 	createConsoleAndRedirectIo();
 	
 	logMsgColor(consoleBrightWhiteOnBlack,
@@ -104,6 +146,8 @@ DWORD WINAPI initialize(LPVOID lpParam) {
 	if(findSigs()) {
 		logMsg("Finished finding pointers in %llums", GetTickCount64() - startTime);
 
+		applyLegalAndLogoPatches();
+		
 		initHooks();
 
 		logMsgColor(consoleBrightGreenOnBlack, "Load online when you're ready\nUniversal GTAO_Booster will unload and this window will disappear automatically, this is normal!");

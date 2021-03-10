@@ -53,8 +53,8 @@ char __fastcall netCatalogueInsertUniqueHook(uint64_t catalog, uint64_t* key, ui
 	}
 
 	// insert directly
-	netCatalogueInsert(hashArray, key, &item);
-
+	netCatalogueInsertPtr(hashArray, key, &item);
+	
 	return 1;
 }
 

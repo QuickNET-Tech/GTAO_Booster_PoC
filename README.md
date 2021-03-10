@@ -29,4 +29,4 @@ or
 
 ## More details
 
-[Writeup](https://nee.lv/2021/02/28/How-I-cut-GTA-Online-loading-times-by-70/)
+If you want more information, I recommend you read tostercx's original [writeup](https://nee.lv/2021/02/28/How-I-cut-GTA-Online-loading-times-by-70/)

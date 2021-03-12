@@ -49,7 +49,7 @@ void waitForGameWindow(void) {
 	shouldApplyLegalAndLogoPatches = TRUE;
 	
 	while(!FindWindowA("grcWindow", NULL)) {
-		Sleep(50);
+		Sleep(1000); // maybe fix issue #2 part 2?
 	}
 }
 

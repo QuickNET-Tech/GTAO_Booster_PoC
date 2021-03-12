@@ -76,7 +76,7 @@ void createConfig(void) {
 		
 		int32_t enableConsoleValue = 1;
 
-		int32_t result = MessageBoxA(NULL, "A config file was either not found or was malformed and was unable to be read.\n\nDo you want the console to be enabled?", messageboxTitle, MB_SETFOREGROUND | MB_ICONQUESTION | MB_YESNO);
+		int32_t result = MessageBoxA(NULL, "A config file was either not found or was malformed and was unable to be read.\n\nDo you want the console to be enabled?", messageboxTitle, MB_TOPMOST | MB_ICONQUESTION | MB_YESNO);
 		// any response other than clicking "No" will be interpreted as yes.
 		if(result == IDNO) {
 			enableConsoleValue = 0;
